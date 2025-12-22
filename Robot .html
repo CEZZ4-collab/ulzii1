@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register with Spline Background</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            overflow: hidden;
+        }
+
+       
+        .spline-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+       
+        .form-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.6); 
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            width: 300px;
+            text-align: center;
+            color: white;
+        }
+
+        .form-container h2 {
+            margin-bottom: 30px;
+        }
+
+   
+        .form-container input[type="text"],
+        .form-container input[type="password"],
+        .form-container input[type="email"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        a{
+            text-decoration: none;
+            color:white;
+
+        }
+        .login-btn,
+        .register-btn {
+          text-decoration: none;
+            background: #00f2ff;
+            color: black !important;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 15px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover,
+        .register-btn:hover {
+            background: #00c6ff;
+        }
+
+        .toggle-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: none;
+            color: #00f2ff;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    
+     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.27/build/spline-viewer.js"></script>
+<spline-viewer url="https://prod.spline.design/k9AcVT5M1J6vYsfk/scene.splinecode"></spline-viewer>
+
+
+   
+    <div class="form-container" id="formContainer">
+        <h2 id="formTitle">Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-btn" id="submitBtn">Login</button>
+        <button class="toggle-btn" id="toggleBtn">Бүртгүүлэх</button>
+        <a href="index.html">Буцах</a>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('toggleBtn');
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const formContainer = document.getElementById('formContainer');
+
+        toggleBtn.addEventListener('click', () => {
+            if(formTitle.textContent === "Login") {
+                formTitle.textContent = "Register";
+                submitBtn.textContent = "Register";
+                toggleBtn.textContent = "Нэвтрэх";
+                // нэмэлт input нэмэх
+                if(!document.getElementById('username')) {
+                    const usernameInput = document.createElement('input');
+                    usernameInput.type = 'text';
+                    usernameInput.id = 'username';
+                    usernameInput.placeholder = 'Username';
+                    formContainer.insertBefore(usernameInput, document.getElementById('email'));
+                }
+            } else {
+                formTitle.textContent = "Login";
+                submitBtn.textContent = "Login";
+                toggleBtn.textContent = "Бүртгүүлэх";
+                const usernameInput = document.getElementById('username');
+                if(usernameInput) usernameInput.remove();
+            }
+        });
+    </script>
+</body>
+</html>
