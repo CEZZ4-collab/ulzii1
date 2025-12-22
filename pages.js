@@ -1,5 +1,5 @@
 
-        document.querySelectorAll('nav a').forEach(link => {
+        document.querySelectorAll('nav a[href^="#"]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 gsap.to(window, { duration: 1.5, scrollTo: e.target.getAttribute('href'), ease: "power4.inOut" });
