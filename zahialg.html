@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order | Premium & Basic</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        
+        :root {
+            --gold: #d4af37;
+            --blue: #00f2ff;
+            --current-color: var(--gold);
+        }
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Padding-ийг mobile дээр багасгаж, халихаас сэргийлнэ */
+    padding: 20px 5%; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Халихаас сэргийлэх хамгийн чухал хэсэг */
+    box-sizing: border-box; 
+}
+
+.nav-links {
+    display: flex;
+    gap: clamp(10px, 2vw, 25px); /* Дэлгэц жижигрэхэд зай нь дагаж багасна */
+    align-items: center;
+}
+
+/* Login товчийг дэлгэцнээс гаргахгүй байх */
+.login-btn {
+    white-space: nowrap; /* Текстийг доош нь унагахгүй нэг мөрөнд барина */
+    padding: 8px 16px;
+    font-size: 0.7rem;
+}
+
+/* --- Mobile Fix --- */
+@media (max-width: 600px) {
+    nav {
+        padding: 15px 15px; /* Утас дээр хажуу талын зайг багасгана */
+    }
+    
+    .logo {
+        font-size: 1.2rem; /* Логог бага зэрэг жижигсгэнэ */
+    }
+
+    .nav-links {
+        gap: 10px; /* Холбоосууд хоорондын зайг маш бага болгоно */
+    }
+
+    /* Хэрэв багтахгүй хэвээр байвал зарим линкийг нууж болно */
+    .nav-links a:not(.login-btn) {
+        display: none; /* Зөвхөн Login товчийг үлдээх эсвэл Hamburger menu ашиглах */
+    }
+}
+        body {
+            margin: 0;
+            background: #050505;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Арын дэвсгэр анимейшн (Ken Burns Effect) */
+        .order-bg-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .order-bg-img {
+            width: 100%; height: 100%;
+            background-image: url('modern-website-design-examples.jpg'); /* Чиний сан дахь зураг */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            transition: filter 0.8s ease;
+            animation: kenBurns 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes kenBurns {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.15) rotate(1deg); }
+        }
+
+        .order-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 20px 60px;
+        }
+
+        .order-box {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--current-color);
+            padding: 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            transition: border-color 0.5s ease;
+        }
+
+        /* Selector Styling */
+        .selector {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .option {
+            flex: 1;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .option.active[data-type="premium"] { background: var(--gold); color: black; box-shadow: 0 0 20px var(--gold); }
+        .option.active[data-type="basic"] { background: var(--blue); color: black; box-shadow: 0 0 20px var(--blue); }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label {
+            display: block; font-size: 0.65rem; font-weight: 900;
+            color: var(--current-color); margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+
+        input, textarea {
+            width: 100%; padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; color: white; transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--current-color); background: rgba(255, 255, 255, 0.07); outline: none; }
+
+        .submit-btn {
+            width: 100%; padding: 18px;
+            background: var(--current-color); color: black;
+            border: none; border-radius: 12px;
+            font-weight: 900; cursor: pointer; transition: 0.5s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        /* Nav-Bar Styling (Чиний үндсэн вэбтэй адилхан) */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 20px 50px; display: flex;
+            justify-content: space-between; align-items: center;
+            z-index: 9999; background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--current-color); }
+        .accent { color: var(--current-color); transition: 0.5s; }
+    </style>
+</head>
+<body>
+
+    <div class="order-bg-container">
+        <div class="order-bg-img" id="bgImg"></div>
+    </div>
+
+    <nav id="navbar">
+        <div class="logo">MAN<span class="accent">DAKH</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#sec2">3D Space</a>
+            <a href="index.html#sec5">About</a>
+            <a href="Robot.html" class="login-btn" id="navLogin" style="background: var(--current-color); color: black !important; padding: 10px 20px; border-radius: 5px; opacity: 1;">Login</a>
+        </div>
+    </nav>
+
+    <div class="order-wrapper">
+        <div class="order-box" id="mainBox">
+            <h2 style="margin-bottom: 25px; font-weight: 900;">NEW <span class="accent">ORDER</span></h2>
+            
+            <div class="selector">
+                <div class="option active" data-type="premium" onclick="updateTheme('premium')">Premium</div>
+                <div class="option" data-type="basic" onclick="updateTheme('basic')">Basic</div>
+            </div>
+
+            <form action="https://formspree.io/f/your_id" method="POST">
+                <input type="hidden" name="Package" id="pkgInput" value="Premium">
+                <div class="input-group">
+                    <label>Нэр</label>
+                    <input type="text" name="name" required placeholder="Нэрээ бичнэ үү">
+                </div>
+                <div class="input-group">
+                    <label>И-мэйл</label>
+                    <input type="email" name="email" required placeholder="email@example.com">
+                </div>
+                <div class="input-group">
+                    <label>Төслийн тайлбар</label>
+                    <textarea name="message" rows="4" placeholder="Таны хүсэлт..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="subBtn">ИЛГЭЭХ</button>
+            </form>
+        </div>
+    </div>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      // Чиний зураг дээрх Public Key
+      emailjs.init("yihHkFiFZ2VjZBtf5"); 
+   })();
+</script>
+
+<script>
+    // 2. Theme болон Өнгө солих функц (Premium / Basic)
+    function updateTheme(type) {
+        const root = document.querySelector(':root');
+        const options = document.querySelectorAll('.option');
+        const pkgInput = document.getElementById('pkgInput');
+        const bgImg = document.getElementById('bgImg');
+
+        options.forEach(opt => opt.classList.remove('active'));
+        document.querySelector(`[data-type="${type}"]`).classList.add('active');
+
+        if (type === 'premium') {
+            root.style.setProperty('--current-color', '#d4af37'); // Алтлаг
+            pkgInput.value = "Premium";
+            if(bgImg) bgImg.style.filter = "sepia(0.3) brightness(0.6)";
+        } else {
+            root.style.setProperty('--current-color', '#00f2ff'); // Цэнхэр
+            pkgInput.value = "Basic";
+            if(bgImg) bgImg.style.filter = "hue-rotate(180deg) brightness(0.6)";
+        }
+
+        // GSAP Pop effect
+        gsap.fromTo("#mainBox", { scale: 0.95, opacity: 0.8 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" });
+    }
+
+    // 3. Gmail рүү захиалга илгээх функц
+    async function sendOrder(event) {
+        event.preventDefault(); // Хуудас дахин ачаалагдахаас сэргийлнэ
+
+        const btn = document.getElementById('subBtn');
+        const originalText = btn.innerText;
+        btn.innerText = "ИЛГЭЭЖ БАЙНА...";
+        btn.disabled = true;
+
+        // Формоос мэдээллээ уншиж авах
+        const templateParams = {
+            name: document.querySelector('input[name="name"]').value,
+            email: document.querySelector('input[name="email"]').value,
+            package: document.getElementById('pkgInput').value,
+            message: document.querySelector('textarea[name="message"]').value
+        };
+
+        // Чиний Service ID болон Template ID
+        emailjs.send('service_dnveqj5', 'template_vmcf5d9', templateParams)
+            .then(function(response) {
+                alert("Амжилттай! Захиалгыг " + templateParams.email + " хаягаас хүлээн авлаа.");
+                event.target.reset(); // Формыг цэвэрлэх
+            }, function(error) {
+                alert("Алдаа гарлаа. EmailJS-ийн тохиргоогоо шалгана уу.");
+                console.log("FAILED...", error);
+            })
+            .finally(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+    }
+
+    // 4. Хуудас ачаалагдах үед ажиллах хэсэг
+    window.onload = () => {
+        updateTheme('premium'); // Эхлээд Premium-аар ачаална
+        
+        const orderForm = document.querySelector('form');
+        if(orderForm) {
+            orderForm.addEventListener('submit', sendOrder);
+        }
+
+        // GSAP Animations
+        gsap.from("nav", { y: -100, opacity: 0, duration: 1, ease: "power4.out" });
+        gsap.from(".order-box", { y: 50, opacity: 0, duration: 1.2, delay: 0.3, ease: "expo.out" });
+    };
+</script>
+</body>
+</html>
